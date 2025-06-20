@@ -10,4 +10,9 @@
     <ProjectReference Include="..\DietManagementSystem.Domain\DietManagementSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

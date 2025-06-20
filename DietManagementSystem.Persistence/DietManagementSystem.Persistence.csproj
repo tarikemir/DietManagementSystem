@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DietManagementSystem.Domain\DietManagementSystem.Domain.csproj" />
-    <ProjectReference Include="..\DietManagementSystem.Infrastructure\DietManagementSystem.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

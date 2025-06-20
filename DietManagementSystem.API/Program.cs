@@ -8,7 +8,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DietManagementSystemDbContext>((serviceProvider, options) =>
 {
     //options.Use...(builder.Configuration.GetConnectionString("DietManagementSystemDb");
-
 });
 
 var app = builder.Build();
