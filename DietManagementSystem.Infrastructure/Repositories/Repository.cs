@@ -22,14 +22,14 @@ public class Repository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public IQueryable<T> GetAllAsync()
     {
-        return await _dbSet.ToListAsync();
+        return _dbSet.AsNoTracking();
     }
 
-    public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+    public IQueryable<T> FindAsync(Expression<Func<T, bool>> predicate)
     {
-        return await _dbSet.Where(predicate).ToListAsync();
+        return _dbSet.Where(predicate).AsNoTracking();
     }
 
     public async Task AddAsync(T entity)
