@@ -1,4 +1,4 @@
-using DietManagementSystem.Application.Common;
+using DietManagementSystem.Application.Services;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;

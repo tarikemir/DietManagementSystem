@@ -15,8 +15,5 @@ public class CreateDietitianCommandValidator : AbstractValidator<CreateDietitian
             .NotEmpty().WithMessage("Last name is required")
             .MaximumLength(50).WithMessage("Last name must not exceed 50 characters")
             .Matches(@"^[a-zA-Z\s\-']+$").WithMessage("Last name contains invalid characters");
-
-        RuleFor(x => x.ApplicationUserId)
-            .NotEmpty().WithMessage("Application user ID is required");
     }
 }

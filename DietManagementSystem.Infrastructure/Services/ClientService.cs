@@ -5,7 +5,6 @@ using DietManagementSystem.Application.Features.Client.GetClientsByDietitian;
 using DietManagementSystem.Application.Features.Client.UpdateClient;
 using DietManagementSystem.Application.Services;
 using DietManagementSystem.Domain.Entities;
-using DietManagementSystem.Domain.Enums;
 using DietManagementSystem.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DietManagementSystem.Api.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v1/auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {

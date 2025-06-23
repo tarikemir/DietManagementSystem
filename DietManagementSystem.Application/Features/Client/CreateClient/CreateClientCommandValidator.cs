@@ -18,8 +18,5 @@ public class CreateClientCommandValidator : AbstractValidator<CreateClientComman
         RuleFor(c => c.DietitianId)
             .NotEmpty().WithMessage("Dietitian ID cannot be empty.")
             .NotEqual(Guid.Empty).WithMessage("Dietitian ID cannot be an empty GUID.");
-        RuleFor(c => c.ApplicationUserId)
-            .NotEmpty().WithMessage("Application User ID cannot be empty.")
-            .NotEqual(Guid.Empty).WithMessage("Application User ID cannot be an empty GUID.");
     }
 }

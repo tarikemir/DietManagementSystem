@@ -12,6 +12,7 @@ using DietManagementSystem.Domain.Enums;
 using DietManagementSystem.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
+using Microsoft.OpenApi.Models;
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -39,7 +40,38 @@ try
 
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Diet Management System API", Version = "v1" });
+
+        var jwtSecurityScheme = new OpenApiSecurityScheme
+        {
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Description = "Enter your JWT Bearer token below. Example: Bearer {your token}",
+
+            Reference = new OpenApiReference
+            {
+                Id = JwtBearerDefaults.AuthenticationScheme,
+                Type = ReferenceType.SecurityScheme
+            }
+        };
+
+        c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            jwtSecurityScheme,
+            Array.Empty<string>()
+        }
+    });
+    });
+
 
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

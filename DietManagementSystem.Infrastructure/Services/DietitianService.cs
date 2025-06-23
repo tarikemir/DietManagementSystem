@@ -28,7 +28,6 @@ public class DietitianService : IDietitianService
             {
                 FirstName = command.FirstName,
                 LastName = command.LastName,
-                ApplicationUserId = command.ApplicationUserId
             };
 
             await _unitOfWork.Dietitians.AddAsync(dietitian);
@@ -44,7 +43,7 @@ public class DietitianService : IDietitianService
         }
         catch (Exception ex)
         {
-            _loggingService.LogError(ex, "Error creating dietitian with ApplicationUserId: {ApplicationUserId}", command.ApplicationUserId);
+            _loggingService.LogError(ex, "Error creating dietitian");
             return Result<CreateDietitianCommandResponse>.Failure($"Failed to create dietitian: {ex.Message}");
         }
     }

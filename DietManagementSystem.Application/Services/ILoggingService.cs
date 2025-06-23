@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace DietManagementSystem.Application.Common;
+namespace DietManagementSystem.Application.Services;
 
 public interface ILoggingService
 {
@@ -12,4 +12,4 @@ public interface ILoggingService
     void LogTrace(string message, params object[] args);
     void LogCritical(string message, params object[] args);
     void LogCritical(Exception exception, string message, params object[] args);
-} 
+}
