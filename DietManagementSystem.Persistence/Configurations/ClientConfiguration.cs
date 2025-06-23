@@ -9,13 +9,6 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
     public void Configure(EntityTypeBuilder<Client> builder)
     {
         builder.HasKey( e => e.Id);
-        builder.Property( e => e.FirstName).IsRequired()
-            .HasMaxLength(50);
-        builder.Property(e => e.LastName).IsRequired()
-            .HasMaxLength(50);
-        builder.Property(e => e.Email).IsRequired()
-            .HasMaxLength(100);
-        builder.Property(e => e.PhoneNumber).HasMaxLength(15);
         builder.Property(e => e.InitialWeight).IsRequired();
 
         builder.HasOne( e => e.Dietitian)

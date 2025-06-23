@@ -53,4 +53,13 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet.Remove(entity);
         await _context.SaveChangesAsync();
     }
+    public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+    }
+
+    public IQueryable<T> Query()
+    {
+        return _dbSet.AsQueryable();
+    }
 }

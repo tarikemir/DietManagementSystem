@@ -9,18 +9,6 @@ public class DietitianConfiguration : IEntityTypeConfiguration<Dietitian>
     public void Configure(EntityTypeBuilder<Dietitian> builder)
     {
         builder.HasKey( d => d.Id);
-        builder.Property( d => d.FirstName)
-            .IsRequired()
-            .HasMaxLength(50);
-        builder.Property(d => d.LastName)
-            .IsRequired()
-            .HasMaxLength(50);
-        builder.Property(d => d.Email)
-            .IsRequired()
-            .HasMaxLength(100);
-        builder.Property(d => d.PhoneNumber)
-            .IsRequired()
-            .HasMaxLength(15);
 
         builder.HasMany( d => d.Clients)
             .WithOne(c => c.Dietitian)
