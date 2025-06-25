@@ -6,8 +6,7 @@ services:
       context: .
       dockerfile: DietManagementSystem.API/Dockerfile
     ports:
-      - "5000:8080"
-      - "5001:8081"
+      - "5000:5272"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DietManagementSystemDb=Host=ep-dawn-scene-a9s0kh3c-pooler.gwc.azure.neon.tech;Database=diet-management-system;Username=diet-management-system_owner;Password=npg_93ncONKLpomh

@@ -6,8 +6,5 @@ public interface IAuthResponse
 {
     string Token { get; set; }
     DateTime Expiration { get; set; }
-    Guid UserId { get; set; }
-    string Email { get; set; }
-    string UserType { get; set; }
 }
 

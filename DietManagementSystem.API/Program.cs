@@ -16,6 +16,9 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using DietManagementSystem.Application.Features.Auth.Login;
+using MediatR;
+using DietManagementSystem.Application.Behaviors;
+using DietManagementSystem.API.Middlewares;
 
 // Serilog Configuration
 Log.Logger = new LoggerConfiguration()
@@ -42,6 +45,7 @@ try
         .WriteTo.Seq("http://localhost:5341"));
 
     builder.Services.AddControllers();
+
     builder.Services.AddEndpointsApiExplorer();
 
     builder.Services.AddSwaggerGen(c =>
@@ -77,9 +81,9 @@ try
 
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DietManagementSystem.Application.Features.Auth.Login.LoginCommand).Assembly));
-    builder.Services.AddValidatorsFromAssembly(typeof(LoginCommandValidator).Assembly);
-
+    builder.Services.AddValidatorsFromAssembly(typeof(LoginCommand).Assembly);
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly));
+    
     builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
         options.Password.RequireDigit = true;
@@ -117,7 +121,7 @@ try
         };
     });
 
-
+    builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
     builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<IDietPlanService, DietPlanService>();
@@ -148,14 +152,16 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseMiddleware<ValidationExceptionMiddleware>();
     app.UseHttpsRedirection();
-
+    app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
 
-    Log.Information("Diet Management System API started successfully");
+    Log.Information("Diet Management System API started successfully ");
+    Console.WriteLine("API is up! Access Swagger here http://localhost:5272/swagger");
     app.Run();
 }
 catch (Exception ex)

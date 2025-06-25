@@ -1,4 +1,5 @@
 ﻿using DietManagementSystem.Application.Features.DietPlan.CreateDietPlan;
+using DietManagementSystem.Application.Helpers;
 using DietManagementSystem.Application.Services;
 using MediatR;
 
@@ -31,7 +32,8 @@ public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, R
 
             if (!createdUser.IsSuccess) return Result<CreateClientCommandResponse>.Failure("Client is already created.");
 
-            var result = await _clientService.GetClientAsync(createdUser.Value.UserId);
+            var createdUserId = TokenHelper.GetUserIdFromToken(createdUser.Value.Token);
+            var result = await _clientService.GetClientAsync(createdUserId);
 
             if (result.IsFailure || result is null)
             {

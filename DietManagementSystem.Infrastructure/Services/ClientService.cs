@@ -194,7 +194,8 @@ public class ClientService : IClientService
                 Email = c.ApplicationUser.Email,
                 InitialWeight = c.InitialWeight,
                 DietitianId = c.DietitianId,
-                DietitianName = $"{c.Dietitian?.FirstName} {c.Dietitian?.LastName}"
+                DietitianName = $"{c.Dietitian?.FirstName} {c.Dietitian?.LastName}",
+                ApplicationUserId = c.ApplicationUser.Id
             }).ToList();
 
             return Result<List<GetClientsByDietitianQueryResponse>>.Success(response);

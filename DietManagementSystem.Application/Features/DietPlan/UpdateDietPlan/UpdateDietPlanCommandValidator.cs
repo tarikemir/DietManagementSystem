@@ -22,7 +22,6 @@ public class UpdateDietPlanCommandValidator : AbstractValidator<UpdateDietPlanCo
         RuleFor(x => x.InitialWeight)
             .GreaterThan(0).WithMessage("Initial weight must be greater than zero.");
         RuleFor(x => x.TargetWeight)
-            .GreaterThan(0).WithMessage("Target weight must be greater than zero.")
-            .GreaterThan(x => x.InitialWeight).WithMessage("Target weight must be greater than initial weight.");
+            .GreaterThan(0).WithMessage("Target weight must be greater than zero.");
     }
 }

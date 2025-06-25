@@ -214,7 +214,7 @@ public class AuthService : IAuthService
                 Subject = new ClaimsIdentity(new[]
                     {
                         new Claim(ClaimTypes.Role, user.UserType.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                        new Claim(JwtRegisteredClaimNames.Sub, arrangedId.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim("userid", user.Id.ToString()),
@@ -237,10 +237,7 @@ public class AuthService : IAuthService
             return new()
             {
                 Token = tokenHandler.WriteToken(token),
-                Expiration = token.ValidTo,
-                UserId = arrangedId, //ApplicationUser ID'ye denk geliyor.
-                Email = user.Email,
-                UserType = user.UserType.ToString()
+                Expiration = token.ValidTo
             };
         }
         catch (Exception ex)

@@ -1,4 +1,5 @@
-!!! THERE IS A POSTMAN COLLECTION IN THE REPOSITORY !!!
+## !!! THERE IS A POSTMAN COLLECTION IN THE REPOSITORY !!! Detailed api requests can be imported to Postman.
+## !!! DATABASE SCHEMA DOCUMENTATION IN THE REPOSITORY !!! You can find the database schema documentation in the repository as pdf file.
 
 # Diet Management System
 
@@ -8,11 +9,30 @@ A comprehensive .NET 8 API for managing diet plans, clients, and dietitians with
 
 This project follows Clean Architecture principles with the following layers:
 
-- **API Layer** (`DietManagementSystem.API`) - Controllers and API endpoints
+- **API Layer** (`DietManagementSystem.API`) - API endpoints, DI
 - **Application Layer** (`DietManagementSystem.Application`) - Business logic, CQRS with MediatR
 - **Domain Layer** (`DietManagementSystem.Domain`) - Entities and domain logic
 - **Infrastructure Layer** (`DietManagementSystem.Infrastructure`) - External services and repositories
 - **Persistence Layer** (`DietManagementSystem.Persistence`) - Database context and configurations
+
+ RESTful API design
+ Authentication with .NET Identity Framework
+ Role-based authorization
+ Adherence to DRY principles
+ Fluent validation for data integrity
+ Proper database design with Entity Framework
+ Comprehensive error handling
+ API versioning
+ Appropriate logging mechanisms
+ Unit tests for core functionality
+ Use of CQRS pattern
+ JWT token-based authentication
+
+ ## Documentation
+ API documentation using Swagger/OpenAPI
+ A detailed README with instructions on setting up, testing, and deploying the system
+ Database schema documentation can be found in the repository as pdf file.
+ Endpoint documentation with request/response examples ( Whole Postman collection is in the repository)
 
 ## 🚀 Quick Start
 
@@ -30,23 +50,16 @@ This project follows Clean Architecture principles with the following layers:
    cd DietManagementSystem
    ```
 
-2. **Start the application with Docker Compose**
+2. **Start the application with dotnet cli **
    ```bash
-   docker-compose up -d
+    dotnet restore
+	dotnet build
+    dotnet run --project DietManagementSystem.API
    ```
 
 3. **Access the application**
    - API: http://localhost:5000
    - Swagger UI: http://localhost:5000/swagger
-   - Seq Logging: http://localhost:5341
-
-### Manual Setup (Alternative)
-
-1. **Restore dependencies**
-   dotnet restore
-
-2. **Run the application**
-   dotnet run
 
 ## 🔧 Configuration
 
@@ -59,25 +72,9 @@ The system automatically creates a default admin user:
 ## 🧪 Testing
 
 ### Running Tests
-dotnet test
-
-## 🐳 Docker
-
-### Development
-
-```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f api
-
-# Stop services
-docker-compose down
-
-# Rebuild and start
-docker-compose up --build
-```
+   ```bash
+	dotnet test --verbosity normal
+   ```
 
 ## 📊 Logging
 
@@ -107,11 +104,4 @@ The application uses Serilog for structured logging with multiple sinks:
 The system supports role-based authorization:
 - **Admin**: Full system access
 - **Dietitian**: Client and diet plan management
-- **Client**: Personal diet plan access
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the repository
-- Contact the development team
-- Check the API documentation at `/swagger`
+- **Client**: Can only register if dietitian is known

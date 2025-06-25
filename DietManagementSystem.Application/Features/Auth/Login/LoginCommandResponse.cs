@@ -7,7 +7,4 @@ public class LoginCommandResponse: IAuthResponse
 {
     public string Token { get; set; }
     public DateTime Expiration { get; set; }
-    public Guid UserId { get; set; }
-    public string Email { get; set; }
-    public string UserType { get; set; }
 }

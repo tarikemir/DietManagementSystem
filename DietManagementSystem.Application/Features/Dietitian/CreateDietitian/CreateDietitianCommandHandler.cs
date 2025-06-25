@@ -1,4 +1,6 @@
 ﻿using DietManagementSystem.Application.Common;
+using DietManagementSystem.Application.Features.Client.CreateClient;
+using DietManagementSystem.Application.Helpers;
 using DietManagementSystem.Application.Services;
 using DietManagementSystem.Domain.Enums;
 using DietManagementSystem.Domain.Identity;
@@ -32,9 +34,12 @@ public class CreateDietitianCommandHandler
             LastName = request.LastName
         });
 
+        if (!createdUser.IsSuccess) return Result<CreateDietitianCommandResponse>.Failure("Dietitian is already created.");
+
+        var createdUserId = TokenHelper.GetUserIdFromToken(createdUser.Value.Token);
         var dietitian = await _unitOfWork
             .Dietitians
-            .GetByIdAsync(createdUser.Value.UserId);
+            .GetByIdAsync(createdUserId);
 
         return Result<CreateDietitianCommandResponse>.Success(new CreateDietitianCommandResponse
         {
