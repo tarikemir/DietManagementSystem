@@ -75,8 +75,6 @@ public class DietPlanService : IDietPlanService
             dietPlan.EndDate = request.EndDate;
             dietPlan.InitialWeight = request.InitialWeight;
             dietPlan.TargetWeight = request.TargetWeight;
-            dietPlan.DietitianId = request.DietitianId != Guid.Empty ? request.DietitianId : Guid.Empty;
-            dietPlan.ClientId = request.ClientId;
 
             await _unitOfWork.SaveChangesAsync();
 

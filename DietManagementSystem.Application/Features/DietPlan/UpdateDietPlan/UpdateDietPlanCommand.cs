@@ -10,6 +10,4 @@ public class UpdateDietPlanCommand : IRequest<Result<UpdateDietPlanCommandRespon
     public DateTime EndDate { get; set; }
     public double InitialWeight { get; set; }
     public double TargetWeight { get; set; }
-    public Guid ClientId { get; set; }
-    public Guid DietitianId { get; set; }
 }

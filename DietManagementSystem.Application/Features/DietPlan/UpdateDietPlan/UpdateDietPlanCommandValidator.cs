@@ -24,12 +24,5 @@ public class UpdateDietPlanCommandValidator : AbstractValidator<UpdateDietPlanCo
         RuleFor(x => x.TargetWeight)
             .GreaterThan(0).WithMessage("Target weight must be greater than zero.")
             .GreaterThan(x => x.InitialWeight).WithMessage("Target weight must be greater than initial weight.");
-        RuleFor(x => x.ClientId)
-            .NotEmpty().WithMessage("Client ID is required.")
-            .NotEqual(Guid.Empty).WithMessage("Client ID cannot be empty.");
-        RuleFor(x => x.DietitianId)
-            .NotEmpty().WithMessage("Dietitian ID is required.")
-            .NotEqual(Guid.Empty).WithMessage("Dietitian ID cannot be empty.");
-
     }
 }

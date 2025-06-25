@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: DietManagementSystem.API/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DietManagementSystemDb=Host=ep-dawn-scene-a9s0kh3c-pooler.gwc.azure.neon.tech;Database=diet-management-system;Username=diet-management-system_owner;Password=npg_93ncONKLpomh
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
+    depends_on:
+      - seq
+    volumes:
+      - ./DietManagementSystem.API/Logs:/app/Logs
+
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - "5341:80"
+    environment:
+      ACCEPT_EULA: Y
+    volumes:
+      - seq_data:/data
+
+volumes:
+  seq_data: 

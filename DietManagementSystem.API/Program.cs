@@ -15,6 +15,7 @@ using Serilog;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using DietManagementSystem.Application.Features.Auth.Login;
 
 // Serilog Configuration
 Log.Logger = new LoggerConfiguration()
@@ -77,7 +78,8 @@ try
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DietManagementSystem.Application.Features.Auth.Login.LoginCommand).Assembly));
-    builder.Services.AddValidatorsFromAssembly(typeof(DietManagementSystem.Application.Features.Auth.Login.LoginCommandValidator).Assembly);
+    builder.Services.AddValidatorsFromAssembly(typeof(LoginCommandValidator).Assembly);
+
     builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
         options.Password.RequireDigit = true;

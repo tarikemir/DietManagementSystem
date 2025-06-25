@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{752F6539-A5F6-4356-9392-084AFC968951}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{170EB357-8F62-4EDF-80D4-4711A60F6627}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DietManagementSystem.Domain", "DietManagementSystem.Domain\DietManagementSystem.Domain.csproj", "{7230F559-AF65-4426-A560-4376771DA4DF}"
 EndProject
@@ -16,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DietManagementSystem.Persistence", "DietManagementSystem.Persistence\DietManagementSystem.Persistence.csproj", "{BF8D08A1-E044-4A9E-B754-4F5B1E8BC85F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DietManagementSystem.API", "DietManagementSystem.API\DietManagementSystem.API.csproj", "{0FBDFB7B-138F-4C04-8A9A-08CE8B4AF4A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CD8AE42C-CDFB-4BCB-9D87-6AFFBDA54500}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DietManagementSystem.Tests", "DietManagementSystem.Tests\DietManagementSystem.Tests.csproj", "{4C545207-601F-4FC5-AB89-83A5093067DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{0FBDFB7B-138F-4C04-8A9A-08CE8B4AF4A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FBDFB7B-138F-4C04-8A9A-08CE8B4AF4A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FBDFB7B-138F-4C04-8A9A-08CE8B4AF4A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C545207-601F-4FC5-AB89-83A5093067DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C545207-601F-4FC5-AB89-83A5093067DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C545207-601F-4FC5-AB89-83A5093067DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C545207-601F-4FC5-AB89-83A5093067DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{02989124-4991-4B3B-8E5F-912BEA465870} = {752F6539-A5F6-4356-9392-084AFC968951}
 		{BF8D08A1-E044-4A9E-B754-4F5B1E8BC85F} = {752F6539-A5F6-4356-9392-084AFC968951}
 		{0FBDFB7B-138F-4C04-8A9A-08CE8B4AF4A0} = {752F6539-A5F6-4356-9392-084AFC968951}
+		{4C545207-601F-4FC5-AB89-83A5093067DF} = {CD8AE42C-CDFB-4BCB-9D87-6AFFBDA54500}
 	EndGlobalSection
 EndGlobal

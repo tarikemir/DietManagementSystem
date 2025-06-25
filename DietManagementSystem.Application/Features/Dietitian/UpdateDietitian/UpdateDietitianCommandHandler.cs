@@ -23,7 +23,6 @@ public class UpdateDietitianCommandHandler
 
         dietitian.FirstName = request.FirstName;
         dietitian.LastName = request.LastName;
-        dietitian.ApplicationUserId = request.ApplicationUserId;
         dietitian.UpdatedAt = DateTime.UtcNow;
 
         await _unitOfWork.SaveChangesAsync();
@@ -33,7 +32,6 @@ public class UpdateDietitianCommandHandler
             Id = dietitian.Id,
             FirstName = dietitian.FirstName,
             LastName = dietitian.LastName,
-            ApplicationUserId = dietitian.ApplicationUserId,
             UpdatedAt = dietitian.UpdatedAt ?? DateTime.UtcNow
         });
     }

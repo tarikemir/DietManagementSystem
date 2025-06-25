@@ -1,0 +1,745 @@
+{
+	"info": {
+		"_postman_id": "42e23e70-94e4-443e-b7dd-102a369601c3",
+		"name": "DietManagementSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25552440"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login - As a admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"root@admin.com\",\r\n  \"password\": \"Final!00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register - As a client",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"yunusaksu@gmail.com\",\r\n  \"password\": \"Final!00\",\r\n  \"firstName\": \"Yunus\",\r\n  \"lastName\": \"Aksu\",\r\n  \"initialWeight\": 120,\r\n  \"dietitianId\": \"0197a58a-dfab-7e76-8133-6ff2aae314bc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/auth/register/client",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register",
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register - As a dietitian",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiRGlldGl0aWFuIiwic3ViIjoidWxhc3N1cmFsQGdtYWlsLmNvbSIsImp0aSI6ImVlNzA5OWVmLTVkZjItNDk1ZC04MDBkLWUwNjhmYTdiNmIzZCIsImVtYWlsIjoidWxhc3N1cmFsQGdtYWlsLmNvbSIsInVzZXJpZCI6IjAxOTdhNThhLWRjNDgtN2VmYy1hNGU2LTUwYjk4ZDgxMDY2OCIsInVzZXJUeXBlIjoiRGlldGl0aWFuIiwibmJmIjoxNzUwODI5MDMxLCJleHAiOjE3NTA4MzI2MzEsImlhdCI6MTc1MDgyOTAzMSwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.fO8VvgsBRrQuZsCBnRM1fJfnTWXmET4u1gl0DxaoVjY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"ulassural@gmail.com\",\r\n  \"password\": \"Final!00\",\r\n  \"firstName\": \"Ulaş\",\r\n  \"lastName\": \"Sural\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/auth/register/dietitian",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register",
+								"dietitian"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dietitians",
+			"item": [
+				{
+					"name": "Add Dietitians - Admin only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"yusufkural@gmail.com\",\r\n  \"password\": \"Final!00\",\r\n  \"firstName\": \"Yusuf\",\r\n  \"lastName\": \"Kural\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/dietitians",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"dietitians"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Dietitians - Admin only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/dietitians",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"dietitians"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Dietitians - Admin only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"0197a59f-723f-76b6-9b37-762d41bd005f\",\r\n  \"firstName\": \"Yusuf\",\r\n  \"lastName\": \"Ihlamur\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/dietitians",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"dietitians"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dietitian - Admin only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/dietitians/0197a59f-723f-76b6-9b37-762d41bd005f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"dietitians",
+								"0197a59f-723f-76b6-9b37-762d41bd005f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Dietitian - Admin only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/dietitians/0197a381-341d-7101-a27a-626ec02825e3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"dietitians",
+								"0197a381-341d-7101-a27a-626ec02825e3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Add Client - Admin/Dietitian only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6IjE2NzBmZTExLWYwMDUtNDBjMy05OWYwLWRmNGZmMzM4NGFmNCIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODI5NDY2LCJleHAiOjE3NTA4MzMwNjYsImlhdCI6MTc1MDgyOTQ2NiwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.QiyMixK0SX_we2rdQqVnNaZzqvICwwrYuspY8bdJnKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"tunasipahi@gmail.com\",\r\n  \"password\": \"Final!00\",\r\n  \"firstName\": \"Tuna\",\r\n  \"lastName\": \"Sipahi\",\r\n  \"initialWeight\": 120,\r\n  \"dietitianId\": \"0197a58a-dfab-7e76-8133-6ff2aae314bc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/clients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client - Admin/Dietitian only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6IjE2NzBmZTExLWYwMDUtNDBjMy05OWYwLWRmNGZmMzM4NGFmNCIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODI5NDY2LCJleHAiOjE3NTA4MzMwNjYsImlhdCI6MTc1MDgyOTQ2NiwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.QiyMixK0SX_we2rdQqVnNaZzqvICwwrYuspY8bdJnKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"clientId\": \"0197a593-a2a2-7cd4-83a0-79410a6dca46\",\r\n  \"firstName\": \"Yuşa\",\r\n  \"lastName\": \"Soral\",\r\n  \"initialWeight\": 200\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/clients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Clients - Admin/Dietitians only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6IjE2NzBmZTExLWYwMDUtNDBjMy05OWYwLWRmNGZmMzM4NGFmNCIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODI5NDY2LCJleHAiOjE3NTA4MzMwNjYsImlhdCI6MTc1MDgyOTQ2NiwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.QiyMixK0SX_we2rdQqVnNaZzqvICwwrYuspY8bdJnKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/clients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Client - Admin/Dietitians only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6IjE2NzBmZTExLWYwMDUtNDBjMy05OWYwLWRmNGZmMzM4NGFmNCIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODI5NDY2LCJleHAiOjE3NTA4MzMwNjYsImlhdCI6MTc1MDgyOTQ2NiwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.QiyMixK0SX_we2rdQqVnNaZzqvICwwrYuspY8bdJnKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/clients/0197a4e1-973d-7056-9463-6b4d86c7aaea",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								"0197a4e1-973d-7056-9463-6b4d86c7aaea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Client - Admin/Dietitians only",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6IjE2NzBmZTExLWYwMDUtNDBjMy05OWYwLWRmNGZmMzM4NGFmNCIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODI5NDY2LCJleHAiOjE3NTA4MzMwNjYsImlhdCI6MTc1MDgyOTQ2NiwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.QiyMixK0SX_we2rdQqVnNaZzqvICwwrYuspY8bdJnKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/clients/0197a593-a2a2-7cd4-83a0-79410a6dca46",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								"0197a593-a2a2-7cd4-83a0-79410a6dca46"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Clients of a Dietitians",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/clients/dietitian/0197a58a-dfab-7e76-8133-6ff2aae314bc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"clients",
+								"dietitian",
+								"0197a58a-dfab-7e76-8133-6ff2aae314bc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DietPlan",
+			"item": [
+				{
+					"name": "Add Diet Plan - Admin/Dietitian",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Sporla Zayıflama Programı\",\r\n  \"startDate\": \"2025-06-25T05:54:34.080Z\",\r\n  \"endDate\": \"2025-06-25T05:54:34.080Z\",\r\n  \"initialWeight\": 133,\r\n  \"targetWeight\": 111,\r\n  \"clientId\": \"0197a593-a2a2-7cd4-83a0-79410a6dca46\",\r\n  \"dietitianId\": \"0197a59f-723f-76b6-9b37-762d41bd005f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/diet-plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"diet-plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Diet Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"0197a5a8-7b7b-724e-a4e7-b0786f3902ff\",\r\n  \"title\": \"Aralıklı Oruç ile zayıflama\",\r\n  \"startDate\": \"2025-06-25T05:56:52.553Z\",\r\n  \"endDate\": \"2025-06-28T05:56:52.553Z\",\r\n  \"initialWeight\": 133,\r\n  \"targetWeight\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/diet-plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"diet-plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Diet Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/diet-plans/0197a4f0-33a0-709c-9323-cd353a693e83",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"diet-plans",
+								"0197a4f0-33a0-709c-9323-cd353a693e83"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Diet Plan by Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/diet-plans/0197a5a8-7b7b-724e-a4e7-b0786f3902ff",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"diet-plans",
+								"0197a5a8-7b7b-724e-a4e7-b0786f3902ff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Diet Plans of Client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5272/api/v1/diet-plans/client/0197a593-a2a2-7cd4-83a0-79410a6dca46",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"diet-plans",
+								"client",
+								"0197a593-a2a2-7cd4-83a0-79410a6dca46"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Meal to the Diet Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQWRtaW4iLCJzdWIiOiJyb290QGFkbWluLmNvbSIsImp0aSI6ImI5ZmY3MWQzLTNkOWUtNGVhYi04ODBjLTg1Y2JjN2Q5M2FmYyIsImVtYWlsIjoicm9vdEBhZG1pbi5jb20iLCJ1c2VyaWQiOiIwMTk3YTRkYS1jYThkLTdlOTAtYWNhZC00NGU5MzI3MDE5MzciLCJ1c2VyVHlwZSI6IkFkbWluIiwibmJmIjoxNzUwODMwMTUwLCJleHAiOjE3NTA4MzM3NTAsImlhdCI6MTc1MDgzMDE1MCwiaXNzIjoiRGlldE1hbmFnZW1lbnRTeXN0ZW0iLCJhdWQiOiJEaWV0TWFuYWdlbWVudFN5c3RlbVVzZXJzIn0.73T7YmjwFeGrVG2ccbISD0F3_EI2xYR3G3nxujIbLFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Yumurtalı salata\",\r\n  \"scheduledDate\": \"2025-06-25\",\r\n  \"startTime\": \"08:30\",\r\n  \"endTime\": \"09:30\",\r\n  \"contents\": \"yumurta salatalık marul havuç\",\r\n  \"dietPlanId\": \"0197a5a8-7b7b-724e-a4e7-b0786f3902ff\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5272/api/v1/diet-plans/meal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5272",
+							"path": [
+								"api",
+								"v1",
+								"diet-plans",
+								"meal"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -61,7 +61,6 @@ public class DietitianService : IDietitianService
 
             dietitian.FirstName = command.FirstName;
             dietitian.LastName = command.LastName;
-            dietitian.ApplicationUserId = command.ApplicationUserId;
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -70,7 +69,6 @@ public class DietitianService : IDietitianService
                 Id = dietitian.Id,
                 FirstName = dietitian.FirstName,
                 LastName = dietitian.LastName,
-                ApplicationUserId = dietitian.ApplicationUserId
             });
         }
         catch (Exception ex)
