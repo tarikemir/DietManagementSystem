@@ -64,8 +64,7 @@ This project follows Clean Architecture principles with the following layers:
 ## 🔧 Configuration
 
 ### Default Admin User
-Of course normally I wouldn't share these informations in README but
-The system automatically creates a default admin user:
+Of course normally I wouldn't share these informations in README.
 - **Email**: root@admin.com
 - **Password**: Final!00
 
