@@ -9,5 +9,5 @@ public class RegisterDietitianCommandResponse : IAuthResponse
     public DateTime Expiration { get; set; }
     public Guid UserId { get; set; }
     public string Email { get; set; } = null!;
-    public UserType UserType { get; set; }
+    public string UserType { get; set; }
 }

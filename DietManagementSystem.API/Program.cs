@@ -13,8 +13,10 @@ using DietManagementSystem.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
-// Configure Serilog
+// Serilog Configuration
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -72,12 +74,11 @@ try
     });
     });
 
-
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(DietManagementSystem.Application.Features.Auth.Login.LoginCommand).Assembly));
     builder.Services.AddValidatorsFromAssembly(typeof(DietManagementSystem.Application.Features.Auth.Login.LoginCommandValidator).Assembly);
-    builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+    builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
     {
         options.Password.RequireDigit = true;
         options.Password.RequireUppercase = true;
@@ -87,18 +88,8 @@ try
 
     builder.Services.AddDbContext<DietManagementSystemDbContext>((serviceProvider, options) =>
     {
-        //options.Use...(builder.Configuration.GetConnectionString("DietManagementSystemDb");
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DietManagementSystemDb"));
     });
-
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("AdminOnly", policy =>
-            policy.RequireRole(UserType.Admin.ToString()));
-
-        options.AddPolicy("DietitianOrAdmin", policy =>
-            policy.RequireRole(UserType.Dietitian.ToString(), UserType.Admin.ToString()));
-    });
-
 
     var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>() ?? throw new ArgumentNullException("JwtSettings cannot be found in the appsettings!");
     var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
@@ -119,7 +110,8 @@ try
             ValidateAudience = true,
             ValidAudience = jwtSettings.Audience,
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
+            RoleClaimType = ClaimTypes.Role
         };
     });
 
@@ -131,7 +123,22 @@ try
     builder.Services.AddScoped<IClientService, ClientService>();
     builder.Services.AddScoped<ILoggingService, LoggingService>();
 
+
     var app = builder.Build();
+    using (var scope = app.Services.CreateScope())
+    {
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        try
+        {
+            await SeedAdminUserAsync(userManager);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Seeding roles/admin failed");
+        }
+    }
 
     if (app.Environment.IsDevelopment())
     {
@@ -156,4 +163,39 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
+}
+
+static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager)
+{
+    var adminEmail = "root@admin.com";
+    var adminPassword = "Final!00";
+
+    var existingUser = await userManager.FindByEmailAsync(adminEmail);
+    if (existingUser is null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            UserType = UserType.Admin,
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = "ZERODAY"
+        };
+
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, UserType.Admin.ToString());
+            Console.WriteLine("Admin user created.");
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+                Console.WriteLine($"Error creating admin: {error.Description}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Admin user already exists.");
+    }
 }

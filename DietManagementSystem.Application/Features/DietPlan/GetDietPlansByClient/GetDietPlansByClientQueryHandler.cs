@@ -34,8 +34,7 @@ public class GetDietPlansByClientQueryHandler : IRequestHandler<GetDietPlansByCl
                 ClientId = dietPlan.ClientId,
                 ClientName = dietPlan.ClientName,
                 DietitianId = dietPlan.DietitianId,
-                DietitianName = dietPlan.DietitianName,
-                Meals = dietPlan.Meals
+                DietitianName = dietPlan.DietitianName
             }).ToList();
 
             return Result<List<GetDietPlansByClientQueryResponse>>.Success(mappedResult);

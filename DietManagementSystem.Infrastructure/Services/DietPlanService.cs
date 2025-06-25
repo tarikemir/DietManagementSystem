@@ -42,6 +42,7 @@ public class DietPlanService : IDietPlanService
                 TargetWeight = request.TargetWeight,
                 ClientId = request.ClientId,
                 DietitianId = request?.DietitianId ?? Guid.Empty,
+                CreatedBy = "System"
             };
 
             await _unitOfWork.DietPlans.AddAsync(dietPlan);
@@ -118,9 +119,10 @@ public class DietPlanService : IDietPlanService
             var dietPlan = await _unitOfWork.DietPlans.Query()
             .Include(dp => dp.Client)
             .Include(dp => dp.Dietitian)
-            .Include(dp => dp.Meals)
+                .Include(dp => dp.Meals)
             .FirstOrDefaultAsync(dp => dp.Id == id);
 
+            
             if (dietPlan == null)
                 return Result<GetDietPlanQueryResponse>.Failure("Diet plan not found");
 
@@ -138,21 +140,28 @@ public class DietPlanService : IDietPlanService
         try
         {
             var dietPlans = await _unitOfWork.DietPlans.Query()
-            .Where(dp => dp.ClientId == clientId)
-            .Include(dp => dp.Client)
-            .Include(dp => dp.Dietitian)
-            .Include(dp => dp.Meals)
-            .ToListAsync();
+                .Where(dp => dp.ClientId == clientId)
+                .Include(dp => dp.Client)
+                .Include(dp => dp.Dietitian)
+                .ToListAsync();
 
-            var result = new List<GetDietPlansByClientQueryResponse>();
-            foreach (var dietPlan in dietPlans)
+            var response = dietPlans.Select(dp => new GetDietPlansByClientQueryResponse
             {
-                result.Add(await MapToDietPlanDto<GetDietPlansByClientQueryResponse>(dietPlan));
-            }
+                Id = dp.Id,
+                Title = dp.Title,
+                StartDate = dp.StartDate,
+                EndDate = dp.EndDate,
+                InitialWeight = dp.InitialWeight,
+                TargetWeight = dp.TargetWeight,
+                ClientId = dp.ClientId,
+                ClientName = $"{dp.Client?.FirstName} {dp.Client?.LastName}",
+                DietitianId = dp.DietitianId,
+                DietitianName = $"{dp.Dietitian?.FirstName} {dp.Dietitian?.LastName}"
+            }).ToList();
 
-            return Result<List<GetDietPlansByClientQueryResponse>>.Success(result);
+            return Result<List<GetDietPlansByClientQueryResponse>>.Success(response);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _loggingService.LogError(ex, "Error retrieving diet plans for client ID: {ClientId}", clientId);
             return Result<List<GetDietPlansByClientQueryResponse>>.Failure($"Failed to retrieve diet plans: {ex.Message}");
@@ -172,7 +181,8 @@ public class DietPlanService : IDietPlanService
                 StartTime = request.StartTime,
                 EndTime = request.EndTime,
                 Contents = request.Contents,
-                DietPlanId = request.DietPlanId
+                DietPlanId = request.DietPlanId,
+                CreatedBy = "System"
             };
 
             await _unitOfWork.Meals.AddAsync(meal);
@@ -219,7 +229,7 @@ public class DietPlanService : IDietPlanService
                 ClientName = $"{client?.FirstName} {client?.LastName}",
                 DietitianId = dietPlan.DietitianId,
                 DietitianName = $"{dietitian?.FirstName} {dietitian?.LastName}",
-                Meals = dietPlan.Meals.Select(m => new Meal
+                Meals = dietPlan.Meals.Select(m => new CreateMealCommandResponse
                 {
                     Id = m.Id,
                     Title = m.Title,

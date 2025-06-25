@@ -8,6 +8,6 @@ public interface IAuthResponse
     DateTime Expiration { get; set; }
     Guid UserId { get; set; }
     string Email { get; set; }
-    UserType UserType { get; set; }
+    string UserType { get; set; }
 }
 

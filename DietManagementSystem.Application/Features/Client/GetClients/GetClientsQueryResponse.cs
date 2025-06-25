@@ -1,8 +1,8 @@
 ﻿using DietManagementSystem.Application.Features.DietPlan.GetDietPlan;
 
-namespace DietManagementSystem.Application.Features.Client.GetClientsByDietitian;
+namespace DietManagementSystem.Application.Features.Client.GetClients;
 
-public class GetClientsByDietitianQueryResponse
+public class GetClientsQueryResponse
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }
@@ -13,4 +13,5 @@ public class GetClientsByDietitianQueryResponse
     public string DietitianName { get; set; } = null!;
     public Guid DietitianId { get; set; }
     public Guid ApplicationUserId { get; set; }
+
 }

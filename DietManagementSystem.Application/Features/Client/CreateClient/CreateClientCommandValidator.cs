@@ -6,7 +6,6 @@ public class CreateClientCommandValidator : AbstractValidator<CreateClientComman
 {
     public CreateClientCommandValidator()
     {
-        //write validations
         RuleFor(c => c.FirstName)
             .NotEmpty().WithMessage("Client's First name cannot be empty.")
             .MaximumLength(50).WithMessage("Client's First name cannot exceed 50 characters.");

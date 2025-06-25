@@ -25,8 +25,11 @@ public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, R
                 Password = request.Password,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                InitialWeight = request.InitialWeight,
                 DietitianId = request.DietitianId
             });
+
+            if (!createdUser.IsSuccess) return Result<CreateClientCommandResponse>.Failure("Client is already created.");
 
             var result = await _clientService.GetClientAsync(createdUser.Value.UserId);
 

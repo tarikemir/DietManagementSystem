@@ -109,6 +109,7 @@ public class DietitianService : IDietitianService
         {
             var dietitian = await _unitOfWork.Dietitians
                 .Query().Include(d => d.Clients)
+                .Include(d => d.ApplicationUser)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
             if (dietitian == null)
@@ -125,6 +126,7 @@ public class DietitianService : IDietitianService
                 Id = dietitian.Id,
                 FirstName = dietitian.FirstName,
                 LastName = dietitian.LastName,
+                Email = dietitian.ApplicationUser.Email,
                 ApplicationUserId = dietitian.ApplicationUserId,
                 ClientCount = dietitian.Clients.Count
             });
@@ -144,11 +146,13 @@ public class DietitianService : IDietitianService
             var dietitians = await _unitOfWork.Dietitians
                 .Query()
                 .Include(d => d.Clients)
+                .Include(d => d.ApplicationUser)
                 .Select(d => new GetDietitiansQueryResponse
                 {
                     Id = d.Id,
                     FirstName = d.FirstName,
                     LastName = d.LastName,
+                    Email = d.ApplicationUser.Email,
                     ApplicationUserId = d.ApplicationUserId,
                     ClientCount = d.Clients.Count
                 })

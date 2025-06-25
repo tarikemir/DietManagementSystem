@@ -7,5 +7,4 @@ public class CreateClientCommandResponse
     public string LastName { get; set; }
     public double InitialWeight { get; set; }
     public Guid DietitianId { get; set; }
-    public Guid ApplicationUserId { get; set; }
 }

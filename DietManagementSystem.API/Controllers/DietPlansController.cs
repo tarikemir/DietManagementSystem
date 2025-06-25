@@ -27,90 +27,49 @@ public class DietPlanController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "DietitianOrAdmin")]
+    [Authorize(Roles = "Dietitian,Admin")]
     public async Task<IActionResult> CreateDietPlan([FromBody] CreateDietPlanCommand request)
     {
-        var (userId, userType) = GetCurrentUserInfo();
-
-        if (userId.Value != request.DietitianId && userType.Value != UserType.Admin)
-            return Unauthorized();
-
         var result = await _mediator.Send(request);
         return HandleResult(result);
     }
 
     [HttpPut]
-    [Authorize(Roles = "DietitianOrAdmin")]
+    [Authorize(Roles = "Dietitian,Admin")]
     public async Task<IActionResult> UpdateDietPlan([FromBody] UpdateDietPlanCommand request)
     {
-        var (userId, userType) = GetCurrentUserInfo();
-
-        if (userId.Value != request.DietitianId && userType.Value != UserType.Admin)
-            return Unauthorized();
-
-
         var result = await _mediator.Send(request);
         return HandleResult(result);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "DietitianOrAdmin")]
-    public async Task<IActionResult> DeleteDietPlan(DeleteDietPlanCommand request)
+    [Authorize(Roles = "Dietitian,Admin")]
+    public async Task<IActionResult> DeleteDietPlan(Guid id)
     {
-        var (userId, userType) = GetCurrentUserInfo();
-        if (userType.Value != UserType.Dietitian && userType.Value != UserType.Admin)
-            return Unauthorized();
-
-        var result = await _mediator.Send(request);
+        var result = await _mediator.Send(new DeleteDietPlanCommand { Id = id});
         return HandleResult(result);
-
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDietPlan(GetDietPlanQuery request)
+    public async Task<IActionResult> GetDietPlan(Guid id)
     {
-        var result = await _mediator.Send(request);
+        var result = await _mediator.Send(new GetDietPlanQuery { Id = id});
         return HandleResult(result);
     }
 
     [HttpGet("client/{clientId}")]
-    public async Task<IActionResult> GetDietPlansByClient(GetDietPlansByClientQuery request)
+    public async Task<IActionResult> GetDietPlansByClient(Guid clientId)
     {
-        var (userId, userType) = GetCurrentUserInfo();
-        if (userType.Value != UserType.Dietitian && userType.Value != UserType.Admin)
-            return Unauthorized();
-
-        var result = await _mediator.Send(request);
+        var result = await _mediator.Send(new GetDietPlansByClientQuery { ClientId = clientId });
         return HandleResult(result);
     }
 
     [HttpPost("meal")]
-    [Authorize(Roles = "DietitianOrAdmin")]
+    [Authorize(Roles = "Dietitian,Admin")]
     public async Task<IActionResult> AddMealToDietPlan([FromBody] CreateMealCommand request)
     {
-        var (userId, userType) = GetCurrentUserInfo();
-        if (userType.Value != UserType.Dietitian && userType.Value != UserType.Admin)
-            return Unauthorized();
-
         var result = await _dietPlanService.AddMealToDietPlanAsync(request);
         return HandleResult(result);
-    }
-
-    private (Guid?, UserType?) GetCurrentUserInfo()
-    {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var userTypeClaim = User.FindFirstValue(ClaimTypes.Role);
-
-        if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(userTypeClaim))
-            return (null, null);
-
-        if (!Guid.TryParse(userIdClaim, out var userId))
-            return (null, null);
-
-        if (!Enum.TryParse<UserType>(userTypeClaim, out var userType))
-            return (null, null);
-
-        return (userId, userType);
     }
 
     private IActionResult HandleResult<T>(Result<T> result)

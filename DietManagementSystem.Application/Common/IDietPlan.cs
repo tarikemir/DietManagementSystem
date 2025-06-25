@@ -1,4 +1,6 @@
-﻿namespace DietManagementSystem.Application.Common;
+﻿using DietManagementSystem.Application.Features.Meal.CreateMeal;
+
+namespace DietManagementSystem.Application.Common;
 
 public interface IDietPlan
 {
@@ -12,5 +14,5 @@ public interface IDietPlan
     public string ClientName { get; set; }
     public Guid DietitianId { get; set; }
     public string DietitianName { get; set; }
-    public List<Domain.Entities.Meal> Meals { get; set; }
+    public List<CreateMealCommandResponse> Meals { get; set; }
 }

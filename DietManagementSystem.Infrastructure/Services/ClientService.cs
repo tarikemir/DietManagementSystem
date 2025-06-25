@@ -3,6 +3,8 @@ using DietManagementSystem.Application.Features.Client.CreateClient;
 using DietManagementSystem.Application.Features.Client.GetClient;
 using DietManagementSystem.Application.Features.Client.GetClientsByDietitian;
 using DietManagementSystem.Application.Features.Client.UpdateClient;
+using DietManagementSystem.Application.Features.DietPlan.GetDietPlan;
+using DietManagementSystem.Application.Features.Meal.CreateMeal;
 using DietManagementSystem.Application.Services;
 using DietManagementSystem.Domain.Entities;
 using DietManagementSystem.Domain.Identity;
@@ -118,9 +120,11 @@ public class ClientService : IClientService
     {
         try
         {
-
             var client = await _unitOfWork.Clients.Query()
+                .Include(c => c.ApplicationUser)
                 .Include(c => c.Dietitian)
+                .Include(c => c.DietPlans)
+                    .ThenInclude(dp => dp.Meals)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (client == null)
@@ -129,7 +133,7 @@ public class ClientService : IClientService
                 return Result<GetClientByIdQueryResponse>.Failure("Client not found");
             }
 
-            _loggingService.LogDebug("Successfully retrieved client with ID: {ClientId}, Dietitian: {DietitianName}", 
+            _loggingService.LogDebug("Successfully retrieved client with ID: {ClientId}, Dietitian: {DietitianName}",
                 client.Id, $"{client.Dietitian?.FirstName} {client.Dietitian?.LastName}");
 
             return Result<GetClientByIdQueryResponse>.Success(new GetClientByIdQueryResponse
@@ -137,9 +141,32 @@ public class ClientService : IClientService
                 Id = client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
+                Email = client.ApplicationUser.Email,
                 InitialWeight = client.InitialWeight,
                 DietitianId = client.DietitianId,
-                DietitianName = $"{client.Dietitian?.FirstName} {client.Dietitian?.LastName}"
+                DietitianName = $"{client.Dietitian?.FirstName} {client.Dietitian?.LastName}",
+                DietPlans = client.DietPlans.Select(dp => new GetDietPlanQueryResponse
+                {
+                    Id = dp.Id,
+                    Title = dp.Title,
+                    StartDate = dp.StartDate,
+                    EndDate = dp.EndDate,
+                    InitialWeight = dp.InitialWeight,
+                    TargetWeight = dp.TargetWeight,
+                    ClientId = dp.ClientId,
+                    ClientName = client.FirstName + " " + client.LastName,
+                    DietitianId = client.DietitianId,
+                    DietitianName = client.Dietitian.FirstName + " " + client.Dietitian.LastName,
+                    Meals = dp.Meals.Select(m => new CreateMealCommandResponse
+                    {
+                        Id = m.Id,
+                        Contents = m.Contents,
+                        Title = m.Title,
+                        ScheduledDate = m.ScheduledDate,
+                        StartTime = m.StartTime,
+                        EndTime = m.EndTime,
+                    }).ToList()
+                }).ToList()
             });
         }
         catch (Exception ex)
@@ -156,6 +183,7 @@ public class ClientService : IClientService
             var clients = await _unitOfWork.Clients.Query()
                 .Where(c => c.DietitianId == dietitianId)
                 .Include(c => c.Dietitian)
+                .Include(c => c.ApplicationUser)
                 .ToListAsync();
 
             var response = clients.Select(c => new GetClientsByDietitianQueryResponse
@@ -163,6 +191,7 @@ public class ClientService : IClientService
                 Id = c.Id,
                 FirstName = c.FirstName,
                 LastName = c.LastName,
+                Email = c.ApplicationUser.Email,
                 InitialWeight = c.InitialWeight,
                 DietitianId = c.DietitianId,
                 DietitianName = $"{c.Dietitian?.FirstName} {c.Dietitian?.LastName}"

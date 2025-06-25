@@ -50,7 +50,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register/dietitian")]
-    [Authorize(Roles = nameof(UserType.Admin))]
+    [AllowAnonymous]
     public async Task<IActionResult> RegisterDietitian([FromBody] RegisterDietitianCommand request, IMediator _mediator)
     {
         var result = await _mediator.Send(request);

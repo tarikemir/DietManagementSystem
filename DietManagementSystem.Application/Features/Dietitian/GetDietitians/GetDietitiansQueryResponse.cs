@@ -5,6 +5,7 @@ public class GetDietitiansQueryResponse
     public Guid Id { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
+    public string Email { get; set; } = null!;
     public Guid ApplicationUserId { get; set; }
     public int ClientCount { get; set; }
     public int DietPlanCount { get; set; }

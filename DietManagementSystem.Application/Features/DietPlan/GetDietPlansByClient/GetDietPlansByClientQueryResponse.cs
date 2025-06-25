@@ -1,8 +1,9 @@
 ﻿using DietManagementSystem.Application.Common;
+using DietManagementSystem.Application.Features.Meal.CreateMeal;
 
 namespace DietManagementSystem.Application.Features.DietPlan.GetDietPlansByClient;
 
-public class GetDietPlansByClientQueryResponse : IDietPlan
+public class GetDietPlansByClientQueryResponse
 {
     public Guid Id { get; set; }
     public string Title { get; set; } = null!;
@@ -14,5 +15,4 @@ public class GetDietPlansByClientQueryResponse : IDietPlan
     public string ClientName { get; set; } = null!;
     public Guid DietitianId { get; set; }
     public string DietitianName { get; set; } = null!;
-    public List<Domain.Entities.Meal> Meals { get; set; } = new();
 }

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DietManagementSystem.API.Controllers;
 
-[Authorize(Roles = "AdminOnly")]
+[Authorize]
 [Route("api/v1/dietitians")]
 [ApiController]
 public class DietitiansController : ControllerBase
@@ -22,6 +22,7 @@ public class DietitiansController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateDietitian([FromBody] CreateDietitianCommand command)
     {
         var result = await _mediator.Send(command);
@@ -29,6 +30,7 @@ public class DietitiansController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetDietitians()
     {
         var result = await _mediator.Send(new GetDietitiansQuery());
@@ -36,13 +38,16 @@ public class DietitiansController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetDietitian(Guid id)
     {
-        var result = await _mediator.Send(new GetDietitianByIdQuery { Id = id });
-        return HandleResult(result);
+            var result = await _mediator.Send(new GetDietitianByIdQuery { Id = (Guid) id });
+            return HandleResult(result);
     }
+    
 
     [HttpPut]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateDietitian([FromBody] UpdateDietitianCommand command)
     {
         var result = await _mediator.Send(command);
@@ -50,6 +55,7 @@ public class DietitiansController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteDietitian(Guid id)
     {
         var result = await _mediator.Send(new DeleteDietitianCommand { Id = id });

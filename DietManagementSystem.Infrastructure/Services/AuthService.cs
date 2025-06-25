@@ -13,20 +13,25 @@ using DietManagementSystem.Application.Features.Auth.Login;
 using DietManagementSystem.Application.Features.Auth.RegisterClient;
 using DietManagementSystem.Application.Features.Auth.RegisterDietitian;
 using DietManagementSystem.Application.Common;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using DietManagementSystem.Infrastructure.Repositories;
 
 namespace DietManagementSystem.Infrastructure.Services;
 
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly JwtSettings _jwtSettings;
     private readonly ILoggingService _loggingService;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtSettings, ILoggingService loggingService)
+    public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtSettings, ILoggingService loggingService, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _jwtSettings = jwtSettings.Value;
         _loggingService = loggingService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<LoginCommandResponse>> LoginAsync(LoginCommand request)
@@ -49,7 +54,7 @@ public class AuthService : IAuthService
                 return Result<LoginCommandResponse>.Failure("Invalid credentials");
             }
 
-            return Result<LoginCommandResponse>.Success(GenerateAuthResponse<LoginCommandResponse>(user));
+            return Result<LoginCommandResponse>.Success(await GenerateAuthResponse<LoginCommandResponse>(user));
         }
         catch (Exception ex)
         {
@@ -62,7 +67,6 @@ public class AuthService : IAuthService
     {
         try
         {
-
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
             if (existingUser != null)
@@ -96,8 +100,9 @@ public class AuthService : IAuthService
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 InitialWeight = request.InitialWeight,
-                DietitianId = request.DietitianId,
-                ApplicationUserId = newUser.Id
+                DietitianId = request.DietitianId,// Requestteki DietitianId dietitianIdnin applicationidsi
+                ApplicationUserId = newUser.Id, // newUser client için oluşturulan ApplicationUser 
+                CreatedBy = "System"
             };
 
             newUser.Client = client;
@@ -110,7 +115,7 @@ public class AuthService : IAuthService
                 return Result<RegisterClientCommandResponse>.Failure(errors);
             }
 
-            return Result<RegisterClientCommandResponse>.Success(GenerateAuthResponse<RegisterClientCommandResponse>(newUser));
+            return Result<RegisterClientCommandResponse>.Success(await GenerateAuthResponse<RegisterClientCommandResponse>(newUser));
         }
         catch (Exception ex)
         {
@@ -156,7 +161,8 @@ public class AuthService : IAuthService
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                ApplicationUserId = newUser.Id
+                ApplicationUserId = newUser.Id,
+                CreatedBy = $"{request.FirstName}-{request.LastName}"
             };
 
             newUser.Dietitian = dietitian;
@@ -169,7 +175,7 @@ public class AuthService : IAuthService
                 return Result<RegisterDietitianCommandResponse>.Failure(errors);
             }
 
-            return Result<RegisterDietitianCommandResponse>.Success(GenerateAuthResponse<RegisterDietitianCommandResponse>(newUser));
+            return Result<RegisterDietitianCommandResponse>.Success(await GenerateAuthResponse<RegisterDietitianCommandResponse>(newUser));
         }
         catch (Exception ex)
         {
@@ -178,21 +184,40 @@ public class AuthService : IAuthService
         }
     }
 
-    private T GenerateAuthResponse<T>(ApplicationUser user) where T : IAuthResponse, new()
+    private async Task<T> GenerateAuthResponse<T>(ApplicationUser user) where T : IAuthResponse, new()
     {
         try
         {
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+
+            user.Client = await _unitOfWork.Clients.FirstOrDefaultAsync(c => c.ApplicationUserId == user.Id);
+            user.Dietitian = await _unitOfWork.Dietitians.FirstOrDefaultAsync(d => d.ApplicationUserId == user.Id);
+
+            Guid arrangedId;
+            if (user.Client != null)
+            {
+                arrangedId = user.Client.Id; // Client ID'ye denk geliyor.
+            }
+            else if (user.Dietitian != null)
+            {
+                arrangedId = user.Dietitian.Id; // Dietitian ID'ye denk geliyor.
+            }
+            else
+            {
+                arrangedId = user.Id; // Eğer Client veya Dietitian yoksa, ApplicationUser ID'si kullanılıyor.
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                     {
+                        new Claim(ClaimTypes.Role, user.UserType.ToString()),
                         new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                        new Claim("id", user.Id.ToString()),
+                        new Claim("userid", user.Id.ToString()),
                         new Claim("userType", user.UserType.ToString())
                     }
                 ),
@@ -206,13 +231,16 @@ public class AuthService : IAuthService
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+
+            
+
             return new()
             {
                 Token = tokenHandler.WriteToken(token),
                 Expiration = token.ValidTo,
-                UserId = user.Id,
+                UserId = arrangedId, //ApplicationUser ID'ye denk geliyor.
                 Email = user.Email,
-                UserType = user.UserType
+                UserType = user.UserType.ToString()
             };
         }
         catch (Exception ex)
