@@ -1,10 +1,7 @@
 using DietManagementSystem.Persistence;
-using DietManagementSystem.Application.Common;
-using DietManagementSystem.Infrastructure.Repositories;
 using FluentValidation;
 using DietManagementSystem.Application.Settings;
-using DietManagementSystem.Application.Services;
-using DietManagementSystem.Infrastructure.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -19,6 +16,7 @@ using DietManagementSystem.Application.Features.Auth.Login;
 using MediatR;
 using DietManagementSystem.Application.Behaviors;
 using DietManagementSystem.API.Middlewares;
+using DietManagementSystem.Infrastructure;
 
 // Serilog Configuration
 Log.Logger = new LoggerConfiguration()
@@ -122,12 +120,12 @@ try
     });
 
     builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-    builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-    builder.Services.AddScoped<IAuthService, AuthService>();
-    builder.Services.AddScoped<IDietPlanService, DietPlanService>();
-    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-    builder.Services.AddScoped<IClientService, ClientService>();
-    builder.Services.AddScoped<ILoggingService, LoggingService>();
+
+    builder.Services.AddInfrastructure();
+
+    builder.Services.AddProblemDetails();
+    builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+
 
 
     var app = builder.Build();
@@ -152,7 +150,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseMiddleware<ValidationExceptionMiddleware>();
+    app.UseExceptionHandler();
     app.UseHttpsRedirection();
     app.UseRouting();
     app.UseAuthentication();

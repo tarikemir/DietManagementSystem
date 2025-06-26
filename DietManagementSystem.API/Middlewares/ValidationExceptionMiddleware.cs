@@ -1,26 +1,31 @@
-﻿using System.Text.Json;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Text.Json;
 
 namespace DietManagementSystem.API.Middlewares;
-public class ValidationExceptionMiddleware
+public class ValidationExceptionHandler : IExceptionHandler
 {
-    private readonly RequestDelegate _next;
-    public ValidationExceptionMiddleware(RequestDelegate next)
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        _next = next;
-    }
-    public async Task Invoke(HttpContext context)
-    {
-        try
+        if (exception is ValidationException validationException)
         {
-            await _next(context);
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            httpContext.Response.ContentType = "application/json";
+
+            var errors = validationException.Errors.Select(e => new
+            {
+                e.PropertyName,
+                e.ErrorMessage
+            });
+
+            var response = JsonSerializer.Serialize(new { Errors = errors });
+
+            await httpContext.Response.WriteAsync(response, cancellationToken);
+
+            return true;
         }
-        catch (FluentValidation.ValidationException ex)
-        {
-            context.Response.StatusCode = 400;
-            context.Response.ContentType = "application/json";
-            var errors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
-            var result = JsonSerializer.Serialize(new { Errors = errors });
-            await context.Response.WriteAsync(result);
-        }
+
+        return false;
     }
 }
+
